@@ -1,0 +1,226 @@
+#include <iostream>
+using namespace std;
+
+class fighter{
+  private:
+    int health;
+    int attack;
+    int defense;
+    string name;
+    string attack1;
+    string attack2;
+    string attack3;
+    string attack4;
+  public:
+    void setHealth(int h){
+      health=h;
+    }
+    int getHealth(){
+      return health;
+    }
+    void setAttack(int a){
+      attack=a;
+    }
+    int getAttack(){
+      return attack;
+    }
+    void setDefense(int d){
+      defense=d;
+    }
+    int getDefense(){
+      return defense;
+    }
+    void setName(string n){
+      name=n;
+    }
+    string getName(){
+      return name;
+    }
+    void setAttack1(string a1){
+      attack1=a1;
+    }
+    string getAttack1(){
+      return attack1;
+    }
+    void setAttack2(string a2){
+      attack2=a2;
+    }
+    string getAttack2(){
+      return attack2;
+    }
+    void setAttack3(string a3){
+      attack3=a3;
+    }
+    string getAttack3(){
+      return attack3;
+    }
+    void setAttack4(string a4){
+      attack4=a4;
+    }
+    string getAttack4(){
+      return attack4;
+    }
+};
+
+void stats(fighter p){
+  int choice;
+  cout<<"\nName: "<<p.getName();
+  cout<<"\nHealth: "<<p.getHealth();
+  cout<<"\nAttack: "<<p.getAttack();
+  cout<<"\nDefense: "<<p.getDefense();
+  cout<<"\n\nAttack 1: "<<p.getAttack1();
+  cout<<"\nAttack 2: "<<p.getAttack2();
+  cout<<"\nAttack 3: "<<p.getAttack3();
+  cout<<"\nAttack 4: "<<p.getAttack4();
+  cout<< "\n1) Okay ";
+  cin>>choice;
+  while(choice!=1){
+    cout<<"Please enter the right number(s) to continue\n";
+    cin>>choice;
+  }
+}
+void moveList(fighter a){
+  cout<<"1) "<<a.getAttack1()<<"\n2) "<<a.getAttack2()<<"\n3) "<<a.getAttack3()<<"\n4) "<<a.getAttack4()<<"\n";
+}
+int punch(fighter a){
+  int strength = 5;
+  int attack = a.getAttack()+strength;
+  return attack;
+}
+int kick(fighter a){
+  int strength = 7;
+  int attack = a.getAttack()+strength;
+  return attack;
+}
+int bite(fighter a){
+  int strength =6;
+  int attack = a.getAttack()+strength;
+  return attack;
+}
+void attackUp(fighter& a){
+  int increase = 5;
+  a.setAttack(a.getAttack()+increase);
+}
+void damage(fighter& a, int damage){
+  int health=a.getHealth();
+  
+  if(a.getDefense()>damage){
+    a.setHealth(--health);
+  }
+  else{
+    damage=(damage-a.getDefense())/4;
+    health=a.getHealth()-damage;
+    a.setHealth(health);
+  }
+}
+int cpuChoice(fighter b){
+  int options=0;
+  if(b.getAttack1()!="") options++;
+  if(b.getAttack2()!="") options++;
+  if(b.getAttack3()!="") options++;
+  if(b.getAttack4()!="") options++;
+  return options;
+}
+bool Fight(fighter a, fighter b){
+  int move;
+  int option;
+  while(a.getHealth()>0&&b.getHealth()>0){
+    
+    cout<<"\n"<<a.getName()<<": "<<a.getHealth()<<"\n";
+    cout<<b.getName()<<": "<<b.getHealth()<<"\n";
+    cout<<"\nWhat will you do?\n";
+    moveList(a);
+    cin>>move;
+    if(move==1){
+      damage(b, punch(a));
+      cout<<b.getName()<<" got hit with "<<a.getAttack1()<<endl;
+    }
+    if(move==2){
+      damage(b,kick(a));
+      cout<<b.getName()<<" got hit with "<<a.getAttack2()<<endl;
+    }
+    if(move==3&&a.getAttack3()=="N/A"){
+      cout<<"There is no move in this slot. Try again\n";
+      continue;
+    }
+    if(move==4&&a.getAttack4()=="N/A"){
+      cout<<"There is no move in this slot. Try again\n";
+      continue;
+    }
+    else;
+    //Enemy move
+    option = (rand()%cpuChoice(b))+1;
+    if(option==1){
+      damage(a,bite(b));
+      cout<<endl<<a.getName()<<" got hit with "<<b.getAttack1()<<endl;
+    }
+    if(option==2){
+      attackUp(b);
+      cout<<endl<<b.getName()<<" raises his attack up and now has "<<b.getAttack()<<" attack\n";
+    }
+    if(option==3&&b.getAttack3()==""){
+      cout<<"There is no move in this slot. Try again\n";
+      continue;
+    }
+    if(option==4&&b.getAttack4()==""){
+      cout<<"There is no move in this slot. Try again\n";
+      continue;
+    }
+
+  }
+  if(a.getHealth()<=0){
+    return false;
+  }
+  else return true;
+}
+int main() {
+  //int stars=0; #star system maybe?
+  int lives=4;
+  string enemyname;
+  string name;
+  fighter Player;
+  fighter Enemy;
+  Player.setHealth(12);
+  Player.setAttack(5);
+  Player.setDefense(5);
+  Player.setAttack1("Punch");
+  Player.setAttack2("Kick");
+  Player.setAttack3("N/A");
+  Player.setAttack4("N/A");
+  cout<<"Please tell me your name: ";
+  cin>> name;
+  Player.setName(name);
+  cout<<"Welcome "<<Player.getName()<<endl;
+  cout<<"These are your stats: \n";
+  stats(Player);
+  
+  cout<<"\n\nAn enemy is approaching. What is his name?\n";
+  cin>>enemyname;
+  cout<<"\n These are "<<enemyname<<"'s stats\n";
+  Enemy.setName(enemyname);
+  Enemy.setHealth(11);
+  Enemy.setAttack(6);
+  Enemy.setDefense(4);
+  Enemy.setAttack1("Bite");
+  Enemy.setAttack2("Attack Up");
+  Enemy.setAttack3("");
+  Enemy.setAttack4("");
+  stats(Enemy);
+
+  cout<<"\nHe's here. Lets begin\n";
+
+Checkpoint:
+  if(Fight(Player, Enemy)) cout << "\nCongratulations You Won!!!";
+  else{ 
+  lives--;
+  if(lives==0){
+    cout<<"\n GAME OVER";
+    return 0;
+  }
+  cout<<"\nGood Luck Next Time";
+  cout<<"\nYou now have "<<lives<<" lives";
+  goto Checkpoint;
+  }
+
+  return 0;
+}
